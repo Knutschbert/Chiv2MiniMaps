@@ -5,6 +5,7 @@ edit_uri: blob/main/docs/
 
 theme:
     name: 'material'
+    custom_dir: custom_dir/
     font:
       text: Volkov
     palette:
@@ -98,7 +99,6 @@ extra_javascript:
   - js/labelgun.min.js
   - js/labels.js
   - chiv/chivmap.js
-  - markers.js
   - https://polyfill.io/v3/polyfill.min.js?features=es6
   - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
   - https://unpkg.com/mermaid/dist/mermaid.min.js 
