@@ -1,4 +1,4 @@
-let  leafMarkers =   [
+let leafMarkers = [
 	{
 	  "Name" : "DOOR",
 	  "Position": [ 2463, 2604 ],
