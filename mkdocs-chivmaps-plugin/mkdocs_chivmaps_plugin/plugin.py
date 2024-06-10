@@ -75,7 +75,13 @@ class ChivMapsPlugin(BasePlugin):
                 os.remove(tgt_path)
             print (f'"{os.path.abspath(src_path)}" -> "{os.path.abspath(tgt_path)}"')
             shutil.copyfile(os.path.abspath(f'{self.data_dir}/{dir_name}/markers.js'), os.path.abspath(f'site/MiniMaps/{dir_name}/markers.js'))
-            os.symlink(os.path.abspath(src_path), os.path.abspath(tgt_path), True)
+
+            if config['site_dir'].startswith('/home/runner'):
+                shutil.move(os.path.abspath(src_path), os.path.abspath(tgt_path))
+                mkdocs_utils.log.warn(f'Github Action - Moving assets')
+            else:
+                os.symlink(os.path.abspath(src_path), os.path.abspath(tgt_path), True)
+                mkdocs_utils.log.warn(f'local - creating symlinks')
         return
 
     # def on_pre_template(self, template, template_name, config):
