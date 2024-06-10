@@ -28,11 +28,17 @@ class ChivMapsPlugin(BasePlugin):
     # def on_serve(self, server, config, builder):
     #     return server
 
+    def on_config(self, config):
+        self.target_dir = config["docs_dir"] + '/MiniMaps'
+        return config
+
     def on_pre_build(self, config):
         print('on_pre_build', config)
         print(os.path.abspath('.'))
+        mkdocs_utils.log.info("site: %s, docs: %s", config["site_dir"], config["docs_dir"])
         
-        shutil.rmtree(self.target_dir)
+        if os.path.exists(self.target_dir):
+            shutil.rmtree(self.target_dir)
         os.makedirs(self.target_dir)
         with open(os.path.join(self.target_dir, 'index.md'), 'w') as f:
             f.writelines([ f'[[{d}]]' for d in os.listdir(self.data_dir)])
@@ -60,13 +66,11 @@ class ChivMapsPlugin(BasePlugin):
     # def on_env(self, env, config, files):
     #     return env
     
-    # def on_config(self, config):
-    #     return config
 
     def on_post_build(self, config):
         for dir_name in os.listdir(self.data_dir):
             src_path = os.path.join(self.data_dir, dir_name, 'assets')
-            tgt_path = os.path.join('site','MiniMaps', dir_name, 'assets') 
+            tgt_path = os.path.join(config["site_dir"],'MiniMaps', dir_name, 'assets') 
             if os.path.exists(tgt_path):
                 os.remove(tgt_path)
             print (f'"{os.path.abspath(src_path)}" -> "{os.path.abspath(tgt_path)}"')
