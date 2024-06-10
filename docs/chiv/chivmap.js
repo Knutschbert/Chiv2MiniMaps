@@ -9,18 +9,19 @@ const crs = L.CRS.Simple;
 //   console.log(factorX, factorY);
   // @ts-ignore
    crs.transformation = new L.Transformation(0.0314, 0, 0.0314, 0);
+            console.log(leafMarkers)
             var y = document.getElementsByClassName('md-content__inner')
             var myDiv = document.createElement('div')
             myDiv.id = 'map'
             y[0].appendChild(myDiv)
             var map = L.map('map',{crs: L.CRS.Simple}).setView([0, 0], 1);
-            var bnd = [map.layerPointToLatLng([-0,-0]), map.layerPointToLatLng([8000,8000])];
+            var bnd = [map.layerPointToLatLng([-0,-0]), map.layerPointToLatLng([2000,2000])];
             L.tileLayer('assets/tiles/{z}/{x}/{y}.jpg', {
                 continuousWorld: false,
                 noWrap: true,
                 minZoom: 1,
                 maxZoom: 5,
-                tileSize: 64,
+                tileSize: 128,
                 bounds: bnd,
                 //zoomReverse: true
             }).addTo(map);
@@ -69,7 +70,7 @@ function makeMarker(loc, tooltip, description, icon){
                 iconSize: [32, 32],  // Adjust the size
                 iconAnchor: [16, 32], // Adjust the anchor point
             });
-    var m = L.marker([loc[0]*2, loc[1]*2], {icon: ammo})
+    var m = L.marker([loc[0]*4, loc[1]*4], {icon: ammo})
     m.bindPopup(description);
     // m.bindTooltip(tooltip).openTooltip()
     m.bindTooltip("<div style='background:white; padding:1px 3px 1px 3px'><b>" + tooltip + "</b></div>", 
@@ -83,3 +84,8 @@ function makeMarker(loc, tooltip, description, icon){
 });
     m.addTo(map)
 }
+
+// makeMarker([909,3713],'TWO HANDED HAMMER ','Carryable_WoodenHammer_2','assets/Game/UI/Textures/Icons/WeaponIcons/SquareIcons/Wood_Hammer.png')
+leafMarkers.forEach(el => {
+  makeMarker([el.Position[0]/2, el.Position[1]/2], el.Name + " " + el.Description, el.ObjectName, '../assets' + el.Icon + ".png")
+});
