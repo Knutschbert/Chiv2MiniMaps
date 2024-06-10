@@ -9,7 +9,7 @@ const crs = L.CRS.Simple;
 //   console.log(factorX, factorY);
   // @ts-ignore
    crs.transformation = new L.Transformation(0.0314, 0, 0.0314, 0);
-            console.log(leafMarkers)
+            // console.log(leafMarkers)
             var y = document.getElementsByClassName('md-content__inner')
             var myDiv = document.createElement('div')
             myDiv.id = 'map'

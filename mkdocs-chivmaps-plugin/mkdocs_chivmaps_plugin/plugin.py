@@ -34,11 +34,15 @@ class ChivMapsPlugin(BasePlugin):
         
         shutil.rmtree(self.target_dir)
         os.makedirs(self.target_dir)
+        with open(os.path.join(self.target_dir, 'index.md'), 'w') as f:
+            f.writelines([ f'[[{d}]]' for d in os.listdir(self.data_dir)])
+            f.close()
         for dir_name in os.listdir(self.data_dir):
             print(dir_name)
             with open(os.path.join(self.target_dir, dir_name+'.md'), 'w') as f:
                 f.write(f'## {dir_name} Interactive Map')
                 f.close()
+            
             
             # if (os.path.exists(os.path(self.data_dir, dir_name, 'markers.js')))
                 
@@ -66,6 +70,7 @@ class ChivMapsPlugin(BasePlugin):
             if os.path.exists(tgt_path):
                 os.remove(tgt_path)
             print (f'"{os.path.abspath(src_path)}" -> "{os.path.abspath(tgt_path)}"')
+            shutil.copyfile(os.path.abspath(f'{self.data_dir}/{dir_name}/markers.js'), os.path.abspath(f'site/MiniMaps/{dir_name}/markers.js'))
             os.symlink(os.path.abspath(src_path), os.path.abspath(tgt_path), True)
         return
 
