@@ -62,17 +62,19 @@ function makeAmmo(icon){
     return ammo
 }
 
-function makeMarker(loc, tooltip, description, icon){
+function makeMarker(loc, name, description, objectName, icon){
+    if (name === 'AMMO')
+        icon = 'assets/Game/UI/Textures/Icons/ObjectiveIcons/T_ObjIcon_Ammo.png'
     const ammo = L.icon({
-                iconUrl: 'assets/Game/UI/Textures/Icons/ObjectiveIcons/T_ObjIcon_Ammo.png',  // Replace with your custom marker image
+                // iconUrl: 'assets/Game/UI/Textures/Icons/ObjectiveIcons/T_ObjIcon_Ammo.png',  // Replace with your custom marker image
                 iconUrl: icon,
                 iconSize: [32, 32],  // Adjust the size
                 iconAnchor: [16, 32], // Adjust the anchor point
             });
     var m = L.marker([loc[0]*4, loc[1]*4], {icon: ammo})
-    m.bindPopup(description);
+    m.bindPopup(objectName);
     // m.bindTooltip(tooltip).openTooltip()
-    m.bindTooltip("<div style='background:white; padding:1px 3px 1px 3px'><b>" + tooltip + "</b></div>", 
+    m.bindTooltip("<div style='background:white; padding:1px 3px 1px 3px'><b>" + name + " " + description + "</b></div>", 
 {
     direction: 'right',
     permanent: false,
@@ -88,7 +90,7 @@ if (typeof leafMarkers !== 'undefined') {
 
 // makeMarker([909,3713],'TWO HANDED HAMMER ','Carryable_WoodenHammer_2','assets/Game/UI/Textures/Icons/WeaponIcons/SquareIcons/Wood_Hammer.png')
 leafMarkers.forEach(el => {
-  makeMarker([el.Position[0]/2, el.Position[1]/2], el.Name + " " + el.Description, el.ObjectName, '../../assets' + el.Icon + ".png")
+  makeMarker([el.Position[0]/2, el.Position[1]/2], el.Name, el.Description, el.ObjectName, '../../assets' + el.Icon + ".png")
   console.log('../assets' + el.Icon + ".png")
 });
 }
