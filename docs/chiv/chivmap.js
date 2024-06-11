@@ -129,7 +129,7 @@ function makeMarker(loc, name, description, objectName, icon, type) {
     // iconUrl: 'assets/Game/UI/Textures/Icons/ObjectiveIcons/T_ObjIcon_Ammo.png',  // Replace with your custom marker image
     iconUrl: icon,
     iconSize: [28, 28],  // Adjust the size
-    iconAnchor: [32, 32], // Adjust the anchor point
+    iconAnchor: [14, 14], // Adjust the anchor point
   });
   var m = L.marker([loc[0] * 4, loc[1] * 4], { icon: ammo })
   m.bindPopup(objectName);
