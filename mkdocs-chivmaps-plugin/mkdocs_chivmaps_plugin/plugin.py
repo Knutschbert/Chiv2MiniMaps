@@ -41,35 +41,21 @@ class ChivMapsPlugin(BasePlugin):
             shutil.rmtree(self.target_dir)
         os.makedirs(self.target_dir)
         with open(os.path.join(self.target_dir, 'index.md'), 'w') as f:
-            f.writelines([ f'[[{d}]]' for d in os.listdir(self.data_dir)])
+            f.writelines([ f' - ## [[{d}]]\n' for d in os.listdir(self.data_dir)])
             f.close()
             
-        
         for dir_name in os.listdir(self.data_dir):
             # print(dir_name)
             with open(os.path.join(self.target_dir, dir_name+'.md'), 'w') as f:
                 f.write(f'## {dir_name} Interactive Map')
                 f.close()
-            
-            
             # if (os.path.exists(os.path(self.data_dir, dir_name, 'markers.js')))
-                
             # if os.path.exists(os.path.join(dir_name, 'tiles')):
                 
         return
 
-    # def on_files(self, files, config):
-    #     # print('on_files', [file.src_path for file in files])
-    #     return files
-
-    # def on_nav(self, nav, config, files):
-    #     return nav
-
-    # def on_env(self, env, config, files):
-    #     return env
-    
-
     def on_post_build(self, config):
+        shutil.rmtree(self.target_dir)
         for dir_name in os.listdir(self.data_dir):
             src_path = os.path.join(self.data_dir, dir_name, 'assets')
             tgt_path = os.path.join(config["site_dir"],'MiniMaps', dir_name, 'assets') 
@@ -88,6 +74,29 @@ class ChivMapsPlugin(BasePlugin):
                 mkdocs_utils.log.warn(f'local - creating symlinks')
         return
 
+    def on_page_content(self, html, page, config, files):
+        if (page.url.startswith('MiniMaps') and page.title != 'Index'):
+            html += '\n<div id="map"/>\n<script type="text/javascript" id="myJSON" src="./markers.js"></script>\n'
+            print("changed content")
+        return html
+
+    # def on_page_context(self, context, page, config, nav):
+    #     return context
+
+    # def on_post_page(self, output_content, page, config):
+    #     return output_content
+
+    # def on_files(self, files, config):
+    #     # print('on_files', [file.src_path for file in files])
+    #     return files
+
+    # def on_nav(self, nav, config, files):
+    #     return nav
+
+    # def on_env(self, env, config, files):
+    #     return env
+
+
     # def on_pre_template(self, template, template_name, config):
     #     return template
 
@@ -105,17 +114,3 @@ class ChivMapsPlugin(BasePlugin):
 
     # def on_page_markdown(self, markdown, page, config, files):
     #     return markdown
-
-    def on_page_content(self, html, page, config, files):
-        # print(page, html, len(html), files)
-        if (page.url.startswith('MiniMaps')):
-            html += '\n<div id="map"/>\n<script type="text/javascript" id="myJSON" src="./markers.js"></script>\n'
-            print("changed content")
-        return html
-
-    # def on_page_context(self, context, page, config, nav):
-    #     return context
-
-    # def on_post_page(self, output_content, page, config):
-    #     return output_content
-
