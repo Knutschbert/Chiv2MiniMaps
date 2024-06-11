@@ -28,20 +28,32 @@ layerList = [hudMarkers, weapons, carryables, other]
 if (typeof leafMarkers !== 'undefined') {
 
   var nameCounts = {}
+  var factionNameCounts = {}
   nameThresh = 9;
 
   leafMarkers.forEach(el => {
-    if (el.Name.length > 0) {      
-      if (nameCounts[el.Name])
+    if (el.Name.length > 0) {
+      if (nameCounts[el.Name]) {
         nameCounts[el.Name]++;
+
+        //var faction = nameCounts[el.Name].faction
+        if (el.faction && el.faction !== 'All') {
+          if (factionNameCounts[el.faction])
+            factionNameCounts[el.faction]++;
+          else
+            factionNameCounts[el.faction] = 1;
+        }
+      }
       else
         nameCounts[el.Name] = 1;
     }
   });
+  console.log()
 
-  filteredNameCount = Object.fromEntries(
+  filteredNameCount = Object.assign({}, factionNameCounts, Object.fromEntries(
     Object.entries(nameCounts).filter(([name, count]) => count > nameThresh)
-  );
+  ));
+
 
   for (const [name, cnt] of Object.entries(filteredNameCount)) {
     dynamicGroups[name] = L.layerGroup();
@@ -114,7 +126,7 @@ var iconOverride = {
   'BATTERING RAM': '/icons/BatteringRam.png',
 }
 
-function makeMarker(loc, name, description, objectName, icon, type) {
+function makeMarker(loc, name, description, objectName, icon, type, faction) {
 
   // console.log(name)
   // console.log(description)
@@ -123,7 +135,7 @@ function makeMarker(loc, name, description, objectName, icon, type) {
   // }
   console.log(iconOverride[name])
   if (iconOverride[name])
-    icon = '../../assets'+iconOverride[name]
+    icon = '../../assets' + iconOverride[name]
 
   const ammo = L.icon({
     // iconUrl: 'assets/Game/UI/Textures/Icons/ObjectiveIcons/T_ObjIcon_Ammo.png',  // Replace with your custom marker image
@@ -146,7 +158,7 @@ function makeMarker(loc, name, description, objectName, icon, type) {
 
 
   // Add marker to category
-  
+
   // if (el.Name.length > 0){
   //   markerGroups[el.Name] 
   // }
@@ -154,6 +166,15 @@ function makeMarker(loc, name, description, objectName, icon, type) {
   if (dynamicGroups[name]) {
     m.addTo(dynamicGroups[name])
   }
+
+  if (faction && faction !== 'All')
+    if (dynamicGroups[faction]){
+      m.addTo(dynamicGroups[faction])
+      m.addTo(hudMarkers)
+    }
+    else
+      console.log(`Unknown faction ${faction}`)
+
   if (type !== 'undefined') {
     if (type === 'HudMarkers')
       m.addTo(hudMarkers)
@@ -173,14 +194,17 @@ function makeMarker(loc, name, description, objectName, icon, type) {
 
 }
 
-var layerControl = L.control.layers(null, overlayMaps, { collapsed:false }).addTo(map);
+var layerControl = L.control.layers(null, overlayMaps, { collapsed: false }).addTo(map);
 
 if (typeof leafMarkers !== 'undefined') {
 
-  
+
   // makeMarker([909,3713],'TWO HANDED HAMMER ','Carryable_WoodenHammer_2','assets/Game/UI/Textures/Icons/WeaponIcons/SquareIcons/Wood_Hammer.png')
   leafMarkers.forEach(el => {
-    makeMarker([el.Position[0] / 2, el.Position[1] / 2], el.Name, el.Description, el.ObjectName, '../../assets' + el.Icon + ".png", el.type)
+    var faction = 'All'
+    if (typeof el['faction'] !== 'undefined')
+      faction = el.faction
+    makeMarker([el.Position[0] / 2, el.Position[1] / 2], el.Name, el.Description, el.ObjectName, '../../assets' + el.Icon + ".png", el.type, faction)
   });
 
 }
