@@ -42,7 +42,6 @@ if (typeof leafMarkers !== 'undefined') {
   filteredNameCount = Object.fromEntries(
     Object.entries(nameCounts).filter(([name, count]) => count > nameThresh)
   );
-  console.log(filteredNameCount)
 
   for (const [name, cnt] of Object.entries(filteredNameCount)) {
     dynamicGroups[name] = L.layerGroup();
@@ -102,20 +101,35 @@ function makeAmmo(icon) {
 }
 
 var markerGroups = {}
+var iconOverride = {
+  'MANTLET': '/icons/Mantlet.png',
+  'AMMO': '/Game/UI/Textures/Icons/ObjectiveIcons/T_ObjIcon_Ammo.png',
+  'GOLDEN ROOSTER': '/icons/GoldenCock.png',
+  'CRAB CRATE': '/icons/CrabCrate.png',
+  'BOOK': '/icons/Book.png',
+  'DOOR': '/icons/Door.png',
+  'SKULL': '/icons/Skull.png',
+  'Yorick': '/icons/Yorick.png',
+  'BROKEN SWORD': '/icons/BrokenSword.png',
+  'BATTERING RAM': '/icons/BatteringRam.png',
+}
 
 function makeMarker(loc, name, description, objectName, icon, type) {
 
   // console.log(name)
   // console.log(description)
-  if (typeof name == 'string' && name === 'AMMO') {
-    icon = 'assets/Game/UI/Textures/Icons/ObjectiveIcons/T_ObjIcon_Ammo.png'
-  }
+  // if (typeof name == 'string' && name === 'AMMO') {
+  //   icon = 'assets/Game/UI/Textures/Icons/ObjectiveIcons/T_ObjIcon_Ammo.png'
+  // }
+  console.log(iconOverride[name])
+  if (iconOverride[name])
+    icon = '../../assets'+iconOverride[name]
 
   const ammo = L.icon({
     // iconUrl: 'assets/Game/UI/Textures/Icons/ObjectiveIcons/T_ObjIcon_Ammo.png',  // Replace with your custom marker image
     iconUrl: icon,
-    iconSize: [32, 32],  // Adjust the size
-    iconAnchor: [16, 32], // Adjust the anchor point
+    iconSize: [28, 28],  // Adjust the size
+    iconAnchor: [32, 32], // Adjust the anchor point
   });
   var m = L.marker([loc[0] * 4, loc[1] * 4], { icon: ammo })
   m.bindPopup(objectName);
@@ -166,9 +180,7 @@ if (typeof leafMarkers !== 'undefined') {
   
   // makeMarker([909,3713],'TWO HANDED HAMMER ','Carryable_WoodenHammer_2','assets/Game/UI/Textures/Icons/WeaponIcons/SquareIcons/Wood_Hammer.png')
   leafMarkers.forEach(el => {
-    // console.log(el)
     makeMarker([el.Position[0] / 2, el.Position[1] / 2], el.Name, el.Description, el.ObjectName, '../../assets' + el.Icon + ".png", el.type)
-    // console.log('../assets' + el.Icon + ".png")
   });
 
 }
