@@ -10,10 +10,10 @@ const crs = L.CRS.Simple;
   // @ts-ignore
    crs.transformation = new L.Transformation(0.0314, 0, 0.0314, 0);
             // console.log(leafMarkers)
-            var y = document.getElementsByClassName('md-content__inner')
-            var myDiv = document.createElement('div')
-            myDiv.id = 'map'
-            y[0].appendChild(myDiv)
+            // var y = document.getElementsByClassName('md-content__inner')
+            // var myDiv = document.createElement('div')
+            // myDiv.id = 'map'
+            // y[0].appendChild(myDiv)
             var map = L.map('map',{crs: L.CRS.Simple}).setView([0, 0], 1);
             var bnd = [map.layerPointToLatLng([-0,-0]), map.layerPointToLatLng([2000,2000])];
             L.tileLayer('assets/tiles/{z}/{x}/{y}.jpg', {
@@ -63,9 +63,8 @@ function makeAmmo(icon){
 }
 
 function makeMarker(loc, tooltip, description, icon){
-    
     const ammo = L.icon({
-                // iconUrl: 'assets/Game/UI/Textures/Icons/ObjectiveIcons/T_ObjIcon_Ammo.png',  // Replace with your custom marker image
+                iconUrl: 'assets/Game/UI/Textures/Icons/ObjectiveIcons/T_ObjIcon_Ammo.png',  // Replace with your custom marker image
                 iconUrl: icon,
                 iconSize: [32, 32],  // Adjust the size
                 iconAnchor: [16, 32], // Adjust the anchor point
@@ -85,7 +84,11 @@ function makeMarker(loc, tooltip, description, icon){
     m.addTo(map)
 }
 
+if (typeof leafMarkers !== 'undefined') {
+
 // makeMarker([909,3713],'TWO HANDED HAMMER ','Carryable_WoodenHammer_2','assets/Game/UI/Textures/Icons/WeaponIcons/SquareIcons/Wood_Hammer.png')
 leafMarkers.forEach(el => {
-  makeMarker([el.Position[0]/2, el.Position[1]/2], el.Name + " " + el.Description, el.ObjectName, '../assets' + el.Icon + ".png")
+  makeMarker([el.Position[0]/2, el.Position[1]/2], el.Name + " " + el.Description, el.ObjectName, '../../assets' + el.Icon + ".png")
+  console.log('../assets' + el.Icon + ".png")
 });
+}

@@ -33,8 +33,8 @@ class ChivMapsPlugin(BasePlugin):
         return config
 
     def on_pre_build(self, config):
-        print('on_pre_build', config)
-        print(os.path.abspath('.'))
+        # print('on_pre_build', config)
+        # print(os.path.abspath('.'))
         mkdocs_utils.log.info("site: %s, docs: %s", config["site_dir"], config["docs_dir"])
         
         if os.path.exists(self.target_dir):
@@ -43,8 +43,10 @@ class ChivMapsPlugin(BasePlugin):
         with open(os.path.join(self.target_dir, 'index.md'), 'w') as f:
             f.writelines([ f'[[{d}]]' for d in os.listdir(self.data_dir)])
             f.close()
+            
+        
         for dir_name in os.listdir(self.data_dir):
-            print(dir_name)
+            # print(dir_name)
             with open(os.path.join(self.target_dir, dir_name+'.md'), 'w') as f:
                 f.write(f'## {dir_name} Interactive Map')
                 f.close()
@@ -74,8 +76,10 @@ class ChivMapsPlugin(BasePlugin):
             if os.path.exists(tgt_path):
                 os.remove(tgt_path)
             print (f'"{os.path.abspath(src_path)}" -> "{os.path.abspath(tgt_path)}"')
-            shutil.copyfile(os.path.abspath(f'{self.data_dir}/{dir_name}/markers.js'), os.path.abspath(f'site/MiniMaps/{dir_name}/markers.js'))
 
+            if not os.path.exists(f'site/MiniMaps/{dir_name}'):
+                os.makedirs(f'site/MiniMaps/{dir_name}')
+            shutil.copyfile(os.path.abspath(f'{self.data_dir}/{dir_name}/markers.js'), os.path.abspath(f'site/MiniMaps/{dir_name}/markers.js'))
             if config['site_dir'].startswith('/home/runner'):
                 shutil.move(os.path.abspath(src_path), os.path.abspath(tgt_path))
                 mkdocs_utils.log.warn(f'Github Action - Moving assets')
@@ -103,9 +107,9 @@ class ChivMapsPlugin(BasePlugin):
     #     return markdown
 
     def on_page_content(self, html, page, config, files):
-        print(page, html, len(html), files)
+        # print(page, html, len(html), files)
         if (page.url.startswith('MiniMaps')):
-            html += '<div id="map"/>'
+            html += '\n<div id="map"/>\n<script type="text/javascript" id="myJSON" src="./markers.js"></script>\n'
             print("changed content")
         return html
 
