@@ -121,9 +121,23 @@ var iconOverride = {
   'BOOK': '/icons/Book.png',
   'DOOR': '/icons/Door.png',
   'SKULL': '/icons/Skull.png',
+  'TANKARD': '/Game/UI/Textures/Icons/WeaponIcons/SquareIcons/Tankard.png',
+  'BOTTLE': '/Game/UI/Textures/Icons/KillFeed/Bottle.png',
   'Yorick': '/icons/Yorick.png',
   'BROKEN SWORD': '/icons/BrokenSword.png',
   'BATTERING RAM': '/icons/BatteringRam.png',
+  'HORSE SHOE': '/icons/HORSE SHOE.png',
+  'RING': '/icons/RING.png',
+  'POT': '/icons/POT.png',
+  'ARROW': '/icons/ARROW.png',
+  'Ballista': '/icons/Ballista.png',
+  'TOPPLING STONE': '/icons/TOPPLING STONE.png',
+  'CHICKEN': '/icons/CHICKEN.png',
+  'BEE HIVE': '/icons/BEE HIVE.png',
+  'HARP': '/icons/HARP.png',
+  'RECORDER': '/icons/RECORDER.png',
+  'OAR': '/icons/OAR.png',
+  'PITCHFORK': '/icons/PITCHFORK.png'
 }
 
 function makeMarker(loc, name, description, objectName, icon, type, faction) {

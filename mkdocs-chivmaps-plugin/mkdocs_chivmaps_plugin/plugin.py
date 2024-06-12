@@ -16,6 +16,7 @@ class ChivMapsPlugin(BasePlugin):
     data_dir = 'MapData'
     target_dir = 'docs/MiniMaps'
     marker_name = 'markers.js'
+    server = None
 
     config_scheme = (
         ('param', config_options.Type(str, default='')),
@@ -25,8 +26,8 @@ class ChivMapsPlugin(BasePlugin):
         self.enabled = True
         self.total_time = 0
 
-    # def on_serve(self, server, config, builder):
-    #     return server
+    def on_serve(self, server, config, builder):
+        return server
 
     def on_config(self, config):
         self.target_dir = config["docs_dir"] + '/MiniMaps'
@@ -37,17 +38,23 @@ class ChivMapsPlugin(BasePlugin):
         # print(os.path.abspath('.'))
         mkdocs_utils.log.info("site: %s, docs: %s", config["site_dir"], config["docs_dir"])
         
-        if os.path.exists(self.target_dir):
-            shutil.rmtree(self.target_dir)
-        os.makedirs(self.target_dir)
-        with open(os.path.join(self.target_dir, 'index.md'), 'w') as f:
-            f.writelines([ f' - ## [[{d}]]\n' for d in os.listdir(self.data_dir)])
-            f.close()
+        # if os.path.exists(self.target_dir):
+        #     shutil.rmtree(self.target_dir)
+        if not os.path.exists(self.target_dir):
+            os.makedirs(self.target_dir)
+        needs_index_rebuild = False
             
         for dir_name in os.listdir(self.data_dir):
             # print(dir_name)
-            with open(os.path.join(self.target_dir, dir_name+'.md'), 'w') as f:
-                f.write(f'## {dir_name} Interactive Map')
+            if not os.path.exists(os.path.join(self.target_dir, dir_name+'.md')):
+                with open(os.path.join(self.target_dir, dir_name+'.md'), 'w') as f:
+                    f.write(f'## {dir_name} Interactive Map')
+                    f.close()
+                    needs_index_rebuild = True
+        
+        if needs_index_rebuild:            
+            with open(os.path.join(self.target_dir, 'index.md'), 'w') as f:
+                f.writelines([ f' - ## [[{d}]]\n' for d in os.listdir(self.data_dir)])
                 f.close()
             # if (os.path.exists(os.path(self.data_dir, dir_name, 'markers.js')))
             # if os.path.exists(os.path.join(dir_name, 'tiles')):
@@ -55,7 +62,7 @@ class ChivMapsPlugin(BasePlugin):
         return
 
     def on_post_build(self, config):
-        shutil.rmtree(self.target_dir)
+        # shutil.rmtree(self.target_dir)
         for dir_name in os.listdir(self.data_dir):
             src_path = os.path.join(self.data_dir, dir_name, 'assets')
             tgt_path = os.path.join(config["site_dir"],'MiniMaps', dir_name, 'assets') 
@@ -65,7 +72,7 @@ class ChivMapsPlugin(BasePlugin):
 
             if not os.path.exists(f'site/MiniMaps/{dir_name}'):
                 os.makedirs(f'site/MiniMaps/{dir_name}')
-            shutil.copyfile(os.path.abspath(f'{self.data_dir}/{dir_name}/markers.js'), os.path.abspath(f'site/MiniMaps/{dir_name}/markers.js'))
+            shutil.copyfile(os.path.abspath(f'{self.data_dir}/{dir_name}/markers.js'), os.path.abspath(f'{config["site_dir"]}/MiniMaps/{dir_name}/markers.js'))
             if config['site_dir'].startswith('/home/runner'):
                 shutil.move(os.path.abspath(src_path), os.path.abspath(tgt_path))
                 mkdocs_utils.log.warn(f'Github Action - Moving assets')
