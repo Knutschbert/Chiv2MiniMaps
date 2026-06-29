@@ -1,0 +1,63 @@
+#map {
+    height: 700px;
+}
+html, body {
+height: 100%;
+margin: 0;
+padding: 0;
+}
+.controls {  
+position: absolute;
+top: 10px;
+left: 50px;
+z-index: 400;
+padding: 10px;
+}
+.fcc {
+display: none;
+position: absolute;
+left: 50px;
+bottom: 15px;
+z-index: 450;
+width: 150px;
+text-align: right;
+background-color: #00ff00;
+}
+.fc {
+height: 150px;
+width: 100%;
+}
+
+.pcc {
+width: 150px;
+}
+
+.pc {
+display: none;
+height: 150px;
+width: 100%;
+}
+.leaflet-tooltip-left:before {
+right: 0;
+margin-right: -12px;
+border-left-color: rgba(0, 0, 0, 0.4);
+}
+.leaflet-tooltip-right:before {
+left: 0;
+margin-left: -12px;
+border-right-color: rgba(0, 0, 0, 0.4);
+}
+.leaflet-tooltip-own {
+position: absolute;
+padding: 4px;
+background-color: rgba(0, 0, 0, 0.4);
+border: 0px solid #000;
+color: #000;
+white-space: nowrap;
+-webkit-user-select: none;
+-moz-user-select: none;
+-ms-user-select: none;
+user-select: none;
+pointer-events: none;
+box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+}
